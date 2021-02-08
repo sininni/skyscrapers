@@ -1,4 +1,3 @@
-
 from typing import List
 
 def read_input(path: str) -> List[str]:
@@ -9,14 +8,11 @@ def read_input(path: str) -> List[str]:
     ['***21**', '4?????*', '4?????*', '*?????5', \
 '*?????*', '*?????*', '*2*1***']
     """
-    list_of_rows = []
     with open(path) as file:
         field = file.readlines()
-        [list_of_rows.append(row[:-1]) 
-            if '\n' in row
-            else list_of_rows.append(row) for row in field]
+        list_of_rows = [row[:-1] if '\n' in row
+            else row for row in field]
     return list_of_rows
-    
 # print(read_input('skyscrapers_state.txt'))
 
 def left_to_right_check(input_line: str, pivot: int) -> bool:
@@ -73,7 +69,7 @@ def check_not_finished_board(board: list) -> bool:
         else:
             continue
     return True
-    
+
 # print(check_not_finished_board(['***21**', '412453*', '423145*', '*5?3215', '*35214*', '*41532*', '*2*1***']))
 #gththj,bnb
 def check_uniqueness_in_rows(board: list):
@@ -105,7 +101,6 @@ def check_uniqueness_in_rows(board: list):
                 number_list.append(row[index])
     return True
 
-
 # print(check_uniqueness_in_rows(['***21**', '412453*', '423145*', '*553215', '*35214*', '*41532*', '*2*1***']))
 
 def check_horizontal_visibility(board: List[str]):
@@ -113,7 +108,7 @@ def check_horizontal_visibility(board: List[str]):
     Check row-wise visibility (left-right and vice versa)
 
     Return True if all horizontal hints are satisfiable,
-    i.e., for line 412453* , hint is 4, and 1245 are the 
+    i.e., for line 412453* , hint is 4, and 1245 are the
     four buildings that could be observed from the hint
     looking to the right.
 
@@ -134,7 +129,7 @@ def check_horizontal_visibility(board: List[str]):
     # new_board = [board.remove(row) for row in board
     #             if row[0] == '*']
     # horizontal_dict = {number[0]: number[1:] for number in new_board}
-    # list_of_horizontal_nums 
+    # list_of_horizontal_nums
     for number in new_board:
         # print(number)
         visible_num = int(number[0])
@@ -149,7 +144,7 @@ def check_horizontal_visibility(board: List[str]):
                 visible_buildings_number += 1
         # print(visible_buildings_number)
         if visible_buildings_number != visible_num:
-            return False 
+            return False
     return True
     # print(visible_buildings_number)
     #  = [tuple(number[0], number[1:]) for number
@@ -175,7 +170,6 @@ def check_columns(board: list):
     False
     """
     below_nums = board[0]  #works with regular list
-   
     below_list = [number for number in below_nums
                         if number != '*']
     below_index_list = [below_nums.find(number)
@@ -187,7 +181,6 @@ def check_columns(board: list):
         for row in board[1:-1]:
             new_row += row[index]
         rows_list.append(new_row)
-            
     down_nums = board[-1]   #works with reversed list
     down_list = [number for number in down_nums
                         if number != '*']
@@ -224,10 +217,4 @@ def check_skyscrapers(input_path: str) -> bool:
             if check_horizontal_visibility(board) and check_columns(board):
                 return True
     return False
-
-# print(check_skyscrapers('skyscrapers_state.txt'))
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
-    print(check_skyscrapers('skyscrapers_state.txt'))
+    
