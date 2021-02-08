@@ -1,3 +1,7 @@
+"""
+This module solves skyscrapers puzzle, checks if
+given game board is right and all rules are abided.
+"""
 from typing import List
 
 def read_input(path: str) -> List[str]:
@@ -29,24 +33,23 @@ def left_to_right_check(input_line: str, pivot: int) -> bool:
     >>> left_to_right_check("452453*", 5)
     False
     """
-    input_line = input_line[1:]
-    list_of_numbers = []
-    for i in range(len(input_line)):
-        try:
-            list_of_numbers.append(int(input_line[i]))
-        except ValueError:
-            continue
+    input_line = input_line[1:-1]
+    list_of_numbers = [int(number) for number in input_line]
     visible_buildings_number = 1
-    for index in range(len(list_of_numbers)):
-        try:
-            if list_of_numbers[index] > list_of_numbers[index - 1]:
-                visible_buildings_number += 1
-        except IndexError:
+    index_control = 1
+    while index_control < 5:
+        smaller_numbers = 0
+        for number in list_of_numbers[0:index_control]:
+            if number < list_of_numbers[index_control]:
+                smaller_numbers += 1
+        if smaller_numbers == len(list_of_numbers[0:index_control]):
             visible_buildings_number += 1
-    return visible_buildings_number == pivot #не просто більше за перше, але за всі
+        index_control += 1
+    return visible_buildings_number == pivot
+ 
+print(left_to_right_check("132345*", 3))
 
 # print(left_to_right_check("412345*", 5))
-
 
 def check_not_finished_board(board: list) -> bool:
     """
@@ -71,7 +74,7 @@ def check_not_finished_board(board: list) -> bool:
     return True
 
 # print(check_not_finished_board(['***21**', '412453*', '423145*', '*5?3215', '*35214*', '*41532*', '*2*1***']))
-#gththj,bnb
+
 def check_uniqueness_in_rows(board: list):
     """
     Check buildings of unique height in each row.
@@ -126,30 +129,18 @@ def check_horizontal_visibility(board: List[str]):
     for row in board:
         if row[0] != '*':
             new_board.append(row)
-    # new_board = [board.remove(row) for row in board
-    #             if row[0] == '*']
-    # horizontal_dict = {number[0]: number[1:] for number in new_board}
-    # list_of_horizontal_nums
     for number in new_board:
-        # print(number)
         visible_num = int(number[0])
-        # print(visible_num)
         number_list = []
         visible_buildings_number = 0
         number = number[1:]
         for index in range(len(number)):
             if all(i < number[index] for i in number_list):
-            # if number[index] > all(number_list):
                 number_list.append(number[index])
                 visible_buildings_number += 1
-        # print(visible_buildings_number)
         if visible_buildings_number != visible_num:
             return False
     return True
-    # print(visible_buildings_number)
-    #  = [tuple(number[0], number[1:]) for number
-    # in new_board]
-    # print(horizontal_dict)
 # print(check_horizontal_visibility((['***21**', '412453*', '423145*', '*543215', '*35214*', '*41532*', '*2*1***'])))
 
 def check_columns(board: list):
@@ -175,7 +166,6 @@ def check_columns(board: list):
     below_index_list = [below_nums.find(number)
                         for number in below_list]
     rows_list = []
-    # final_list = []
     for index in below_index_list:
         new_row = str(below_nums[index])
         for row in board[1:-1]:
@@ -187,7 +177,6 @@ def check_columns(board: list):
     down_index_list = [down_nums.find(number)
                         for number in down_list]
     rowss_list = []
-    # final_list = []
     for index in down_index_list:
         new_row = str(down_nums[index])
         for row in reversed(board[1:-1]):
