@@ -43,8 +43,6 @@ def left_to_right_check(input_line: str, pivot: int) -> bool:
             visible_buildings_number += 1
         index_control += 1
     return visible_buildings_number == pivot
- 
-print(left_to_right_check("132345*", 3))
 
 def check_not_finished_board(board: list) -> bool:
     """
@@ -93,7 +91,6 @@ def check_uniqueness_in_rows(board: list):
             return False
     return True
 
-
 def check_horizontal_visibility(board: List[str]):
     """
     Check row-wise visibility (left-right and vice versa)
@@ -113,23 +110,22 @@ def check_horizontal_visibility(board: List[str]):
 '423145*', '*543215', '*35214*', '*41532*', '*2*1***'])
     False
     """
-    new_board = []
+    if len(board) == 7:
+        board = board[1:-1]
     for row in board:
         if row[0] != '*':
-            new_board.append(row)
-    for number in new_board:
-        visible_num = int(number[0])
-        number_list = []
-        visible_buildings_number = 0
-        number = number[1:]
-        for index in range(len(number)):
-            if all(i < number[index] for i in number_list):
-                number_list.append(number[index])
-                visible_buildings_number += 1
-        if visible_buildings_number != visible_num:
-            return False
+            if left_to_right_check(row, int(row[0])) == False:
+                return False
+        elif row[-1] != '*':
+            row = row[::-1]
+            if left_to_right_check(row, int(row[0])) == False:
+                return False
+        # elif row[0] != '*' and row[-1] !='*':
+        #     if left_to_right_check(row, int(row[0])) == False:
+        #         return False  
     return True
-# print(check_horizontal_visibility((['***21**', '412453*', '423145*', '*543215', '*35214*', '*41532*', '*2*1***'])))
+
+print(check_horizontal_visibility(['2413251', '454213*']))
 
 def check_columns(board: list):
     """
@@ -148,37 +144,35 @@ def check_columns(board: list):
 '*543215', '*35214*', '*41532*', '*2*1***'])
     False
     """
-    below_nums = board[0]  #works with regular list
+    below_nums = board[0]
+    down_nums = board[-1]
+    # board = board[1:-1]
     below_list = [number for number in below_nums
                         if number != '*']
     below_index_list = [below_nums.find(number)
                         for number in below_list]
     rows_list = []
+    # board = board[1:-1]
     for index in below_index_list:
-        new_row = str(below_nums[index])
-        for row in board[1:-1]:
+        new_row = str()
+        for row in board:
             new_row += row[index]
         rows_list.append(new_row)
-    down_nums = board[-1]   #works with reversed list
+
     down_list = [number for number in down_nums
                         if number != '*']
     down_index_list = [down_nums.find(number)
                         for number in down_list]
     rowss_list = []
+    board = board[::-1]
     for index in down_index_list:
-        new_row = str(down_nums[index])
-        for row in reversed(board[1:-1]):
+        new_row = str()
+        for row in board:
             new_row += row[index]
         rowss_list.append(new_row)
+
     rows_list.extend(rowss_list)
     return check_horizontal_visibility(rows_list)
-    # print(rowss_list)
-
-    #need to form numbers strings and then use horisontal check
-    #make one more function for not rewriting same things for
-    #below and down numbers
-
-# print(check_columns(['***21**', '412453*', '423145*', '*543215', '*35214*', '*41232*', '*2*1***']))
 
 def check_skyscrapers(input_path: str) -> bool:
     """
