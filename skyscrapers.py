@@ -14,7 +14,6 @@ def read_input(path: str) -> List[str]:
         list_of_rows = [row[:-1] if '\n' in row
             else row for row in field]
     return list_of_rows
-# print(read_input('skyscrapers_state.txt'))
 
 def left_to_right_check(input_line: str, pivot: int) -> bool:
     """
@@ -120,12 +119,7 @@ def check_horizontal_visibility(board: List[str]):
             row = row[::-1]
             if left_to_right_check(row, int(row[0])) == False:
                 return False
-        # elif row[0] != '*' and row[-1] !='*':
-        #     if left_to_right_check(row, int(row[0])) == False:
-        #         return False  
     return True
-
-print(check_horizontal_visibility(['2413251', '454213*']))
 
 def check_columns(board: list):
     """
@@ -146,13 +140,11 @@ def check_columns(board: list):
     """
     below_nums = board[0]
     down_nums = board[-1]
-    # board = board[1:-1]
     below_list = [number for number in below_nums
                         if number != '*']
     below_index_list = [below_nums.find(number)
                         for number in below_list]
     rows_list = []
-    # board = board[1:-1]
     for index in below_index_list:
         new_row = str()
         for row in board:
@@ -163,15 +155,15 @@ def check_columns(board: list):
                         if number != '*']
     down_index_list = [down_nums.find(number)
                         for number in down_list]
-    rowss_list = []
-    board = board[::-1]
+    second_rows_list = []
+    board = board[::-1]    #reverses the board
     for index in down_index_list:
         new_row = str()
         for row in board:
             new_row += row[index]
-        rowss_list.append(new_row)
+        second_rows_list.append(new_row)
 
-    rows_list.extend(rowss_list)
+    rows_list.extend(second_rows_list)
     return check_horizontal_visibility(rows_list)
 
 def check_skyscrapers(input_path: str) -> bool:
@@ -179,13 +171,15 @@ def check_skyscrapers(input_path: str) -> bool:
     Main function to check the status of skyscraper game board.
     Returns True if the board status is compliant with the rules,
     False otherwise.
-    >>> check_skyscrapers("skyscrapers.txt")
+    >>> check_skyscrapers("skyscrapers_state.txt")
     True
+    >>> check_skyscrapers("skyscrapers_false.txt")
+    False
     """
     board = read_input(input_path)
     if check_not_finished_board(board):
         if check_uniqueness_in_rows(board):
-            if check_horizontal_visibility(board) and check_columns(board):
+            if check_columns(board):
                 return True
     return False
 
