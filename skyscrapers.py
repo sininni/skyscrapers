@@ -22,7 +22,7 @@ def left_to_right_check(input_line: str, pivot: int) -> bool:
     is visible looking to the right, False otherwise.
 
     input_line - representing board row.
-    pivot - number on the left-most hint of the input_line. 
+    pivot - number on the left-most hint of the input_line.
 
     >>> left_to_right_check("412453*", 4)
     True
